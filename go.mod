@@ -10,7 +10,7 @@ require (
 	github.com/emersion/go-message v0.16.0
 	github.com/emersion/go-sasl v0.0.0-20220912192320-0145f2c60ead
 	github.com/jedib0t/go-pretty/v6 v6.5.0
-	github.com/k3a/parsemail v1.3.0
+	github.com/mnako/letters v0.2.2
 	github.com/rs/zerolog v1.31.0
 	github.com/spf13/cobra v1.8.0
 )
@@ -36,7 +36,6 @@ require (
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.19 // indirect
 	github.com/mattn/go-runewidth v0.0.13 // indirect
-	github.com/mnako/letters v0.2.2 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/sirupsen/logrus v1.6.0 // indirect
