@@ -6,9 +6,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var getFieldsFormat string
-
-// getFieldsCmd represents the getFields command
 var getFieldsCmd = &cobra.Command{
 	Use:   "getFields",
 	Short: "Get the list of fields",
@@ -25,9 +22,9 @@ var getFieldsCmd = &cobra.Command{
 		}
 
 		switch format {
-		case "table":
+		case tableFormat:
 			t.Render()
-		case "markdown":
+		case markdownFormat:
 			t.RenderMarkdown()
 		}
 	},

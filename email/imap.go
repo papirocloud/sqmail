@@ -67,14 +67,14 @@ func (m *Message) parseBodySection(buffer *imapclient.FetchMessageBuffer) {
 			m.rawBody = v
 		case imap.PartSpecifierNone:
 			m.Raw = v
+		case imap.PartSpecifierMIME:
+			m.rawMime = v
 		}
 	}
 }
 
 func (m *Message) parseFlags(buffer *imapclient.FetchMessageBuffer) {
-	for _, f := range buffer.Flags {
-		m.Flags = append(m.Flags, f)
-	}
+	m.Flags = append(m.Flags, buffer.Flags...)
 }
 
 func (m *Message) parseInternalDate(buffer *imapclient.FetchMessageBuffer) {

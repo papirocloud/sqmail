@@ -21,8 +21,8 @@ func Query(c *imapclient.Client, query string, messageCh chan<- *email.Message) 
 
 	switch res.From {
 	case "emails":
-		switch res.Clause {
-		case "SELECT":
+		switch Clause(res.Clause) {
+		case SELECT:
 			return Select(c, res.Fields, res.Mailbox, res.Limit, messageCh, res.Conds...)
 		default:
 			return fmt.Errorf("invalid clause %s", res.Clause)

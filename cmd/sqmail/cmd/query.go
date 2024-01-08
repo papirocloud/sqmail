@@ -22,7 +22,6 @@ var (
 	silent   bool
 )
 
-// queryCmd represents the query command
 var queryCmd = &cobra.Command{
 	Use:   "query",
 	Short: "Query your IMAP mailbox using SQL",

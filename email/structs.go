@@ -64,6 +64,7 @@ type Message struct {
 
 	rawHeaders []byte
 	rawBody    []byte
+	rawMime    []byte
 
 	Text string
 	HTML string

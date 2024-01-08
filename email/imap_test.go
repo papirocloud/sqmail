@@ -13,7 +13,7 @@ import (
 func TestParseBodySection(t *testing.T) {
 	buffer := &imapclient.FetchMessageBuffer{
 		BodySection: map[*imap.FetchItemBodySection][]byte{
-			&imap.FetchItemBodySection{}: []byte("Test Body"),
+			{}: []byte("Test Body"),
 		},
 	}
 

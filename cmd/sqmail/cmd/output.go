@@ -10,6 +10,14 @@ import (
 	"github.com/papirocloud/sqmail/sql"
 )
 
+const (
+	jsonFormat     = "json"
+	csvFormat      = "csv"
+	tableFormat    = "table"
+	htmlFormat     = "html"
+	markdownFormat = "markdown"
+)
+
 func renderTable(w io.Writer, format string, fields []*sql.Field, mapsCh <-chan map[string]interface{}) {
 	var maps []map[string]interface{}
 
@@ -36,11 +44,11 @@ func renderTable(w io.Writer, format string, fields []*sql.Field, mapsCh <-chan 
 	}
 
 	switch format {
-	case "table":
+	case tableFormat:
 		t.Render()
-	case "html":
+	case htmlFormat:
 		t.RenderHTML()
-	case "markdown":
+	case markdownFormat:
 		t.RenderMarkdown()
 	}
 }
@@ -86,11 +94,11 @@ func writeJson(w io.Writer, mapsCh <-chan map[string]interface{}) {
 
 func writeOutput(w io.Writer, format string, fields []*sql.Field, mapsCh <-chan map[string]interface{}, outputCh chan<- struct{}) {
 	switch format {
-	case "table", "html", "markdown":
+	case tableFormat, htmlFormat, markdownFormat:
 		renderTable(w, format, fields, mapsCh)
-	case "csv":
+	case csvFormat:
 		writeCsv(w, fields, mapsCh)
-	case "json":
+	case jsonFormat:
 		writeJson(w, mapsCh)
 	}
 

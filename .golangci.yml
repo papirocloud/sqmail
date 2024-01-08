@@ -28,7 +28,6 @@ linters:
     - musttag
     - nestif
     - nosprintfhostport
-    - prealloc
     - predeclared
     - staticcheck
     - tenv
@@ -48,3 +47,12 @@ issues:
         - goconst
         - gocritic
         - staticcheck
+    - path: 'sql/criteria.go'
+      linters:
+        - exhaustive
+    - path: 'sql/parser.go'
+      linters:
+        - exhaustive
+    - path: 'sql/query.go'
+      linters:
+        - exhaustive

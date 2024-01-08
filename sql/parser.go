@@ -94,7 +94,7 @@ func parseLimit(result *ParseResult, n *tree.Limit) error {
 }
 
 func parseSelect(result *ParseResult, n *tree.Select) error {
-	result.Clause = "SELECT"
+	result.Clause = string(SELECT)
 
 	return nil
 }

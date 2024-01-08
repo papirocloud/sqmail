@@ -12,7 +12,7 @@ func Expunge(c *imapclient.Client) error {
 	return c.Expunge().Wait()
 }
 
-// UIDExpunge permanently removes all messages that have the \Deleted flag set
+// UIDExpunge permanently removes all messages that have the \Deleted flag set.
 func UIDExpunge(c *imapclient.Client, seqSet imap.SeqSet) error {
 	logger.Info().Msg("expunging mailbox")
 	return c.UIDExpunge(seqSet).Wait()
