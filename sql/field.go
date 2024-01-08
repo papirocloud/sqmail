@@ -31,6 +31,20 @@ func AddField(field func() *Field) {
 	}
 }
 
+func ListFields() []*Field {
+	m := make(map[string]*Field)
+	for _, field := range fields {
+		m[field().Name] = field()
+	}
+
+	result := make([]*Field, 0, len(fields))
+	for _, field := range m {
+		result = append(result, field)
+	}
+
+	return result
+}
+
 func GetField(name string) *Field {
 	if field, ok := fields[name]; ok {
 		return field()

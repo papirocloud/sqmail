@@ -17,7 +17,6 @@ var (
 	tls      bool
 	username string
 	password string
-	format   string
 	output   string
 	query    string
 	silent   bool
@@ -92,8 +91,6 @@ func init() {
 
 	queryCmd.Flags().StringVarP(&password, "password", "P", "", "IMAP password")
 	_ = queryCmd.MarkFlagRequired("password")
-
-	queryCmd.Flags().StringVarP(&format, "format", "f", "table", "Output format (table, csv, json, html, markdown)")
 
 	queryCmd.Flags().StringVarP(&output, "output", "o", "", "Output file (default: stdout)")
 
