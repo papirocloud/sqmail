@@ -57,6 +57,12 @@ func Select(c *imapclient.Client, fields []*Field, from string, limit int64, mes
 
 	fetchCmd := sqmailImap.StreamUIDFetch(c, data.All, fetchOptionsFromFields(fields))
 
+	handleFetchResult(fields, limit, fetchCmd, messageCh, clauses...)
+
+	return nil
+}
+
+func handleFetchResult(fields []*Field, limit int64, fetchCmd *imapclient.FetchCommand, messageCh chan<- *email.Message, clauses ...*WhereClause) {
 	cnt := 0
 	for {
 		if limit > 0 && cnt >= int(limit) {
@@ -90,6 +96,4 @@ func Select(c *imapclient.Client, fields []*Field, from string, limit int64, mes
 			cnt++
 		}
 	}
-
-	return nil
 }

@@ -8,99 +8,57 @@ import (
 	"github.com/mnako/letters"
 )
 
-func (m *Message) FromIMAPEnvelope(envelope *imap.Envelope, fields map[string]bool) error {
-	if envelope != nil {
-		if _, ok := fields["date"]; ok {
-			m.Envelope.Date = envelope.Date
-		}
+// FromIMAP converts a raw IMAP message into a Message object.
+func (m *Message) FromIMAP(buffer *imapclient.FetchMessageBuffer, fields map[string]bool) error {
+	m.UID = buffer.UID
+	m.SeqNum = buffer.SeqNum
 
-		if _, ok := fields["subject"]; ok {
-			m.Envelope.Subject = envelope.Subject
-		}
+	var parsers = map[string]func(messageBuffer *imapclient.FetchMessageBuffer){
+		"flags":      m.parseFlags,
+		"serverdate": m.parseInternalDate,
+		"size":       m.parseSize,
+		"body":       m.parseBodySection,
+	}
 
-		if _, ok := fields["messageid"]; ok {
-			m.Envelope.MessageID = envelope.MessageID
+	for field, parseFn := range parsers {
+		if _, ok := fields[field]; ok || field == "body" {
+			parseFn(buffer)
 		}
+	}
 
-		if _, ok := fields["inreplyto"]; ok {
-			m.Envelope.InReplyTo = envelope.InReplyTo
-		}
+	m.ensureRaw()
 
-		if _, ok := fields["from"]; ok {
-			for _, from := range envelope.From {
-				addr := from.Addr()
-				if addr != "" {
-					m.Envelope.From = append(m.Envelope.From, addr)
-				}
-			}
-		}
+	if err := m.FromIMAPEnvelope(buffer.Envelope, fields); err != nil {
+		return err
+	}
 
-		if _, ok := fields["sender"]; ok {
-			for _, sender := range envelope.Sender {
-				addr := sender.Addr()
-				if addr != "" {
-					m.Envelope.Sender = append(m.Envelope.Sender, addr)
-				}
-			}
-		}
+	if !m.shouldKeepProcessing(fields) {
+		return nil
+	}
 
-		if _, ok := fields["replyto"]; ok {
-			for _, replyTo := range envelope.ReplyTo {
-				addr := replyTo.Addr()
-				if addr != "" {
-					m.Envelope.ReplyTo = append(m.Envelope.ReplyTo, addr)
-				}
-			}
-		}
+	msg, err := letters.ParseEmail(bytes.NewReader(m.Raw))
+	if err != nil {
+		return err
+	}
 
-		if _, ok := fields["to"]; ok {
-			for _, to := range envelope.To {
-				addr := to.Addr()
-				if addr != "" {
-					m.Envelope.To = append(m.Envelope.To, addr)
-				}
-			}
-		}
+	var msgParsers = map[string]func(letters.Email){
+		"text":        m.parseText,
+		"html":        m.parseHtml,
+		"headers":     m.parseHeaders,
+		"attachments": m.parseAttachments,
+		"embedded":    m.parseEmbeds,
+	}
 
-		if _, ok := fields["cc"]; ok {
-			for _, cc := range envelope.Cc {
-				addr := cc.Addr()
-				if addr != "" {
-					m.Envelope.Cc = append(m.Envelope.Cc, addr)
-				}
-			}
-		}
-
-		if _, ok := fields["bcc"]; ok {
-			for _, bcc := range envelope.Bcc {
-				addr := bcc.Addr()
-				if addr != "" {
-					m.Envelope.Bcc = append(m.Envelope.Bcc, addr)
-				}
-			}
+	for field, parseFn := range msgParsers {
+		if _, ok := fields[field]; ok {
+			parseFn(msg)
 		}
 	}
 
 	return nil
 }
 
-// FromIMAP converts a raw IMAP message into a Message object.
-func (m *Message) FromIMAP(buffer *imapclient.FetchMessageBuffer, fields map[string]bool) error {
-	m.UID = buffer.UID
-	m.SeqNum = buffer.SeqNum
-
-	if _, ok := fields["flags"]; ok {
-		copy(buffer.Flags, m.Flags)
-	}
-
-	if _, ok := fields["serverdate"]; ok {
-		m.InternalDate = buffer.InternalDate
-	}
-
-	if _, ok := fields["size"]; ok {
-		m.RFC822Size = buffer.RFC822Size
-	}
-
+func (m *Message) parseBodySection(buffer *imapclient.FetchMessageBuffer) {
 	for k, v := range buffer.BodySection {
 		switch k.Specifier {
 		case imap.PartSpecifierHeader:
@@ -111,57 +69,53 @@ func (m *Message) FromIMAP(buffer *imapclient.FetchMessageBuffer, fields map[str
 			m.Raw = v
 		}
 	}
+}
 
-	if m.Raw == nil {
-		m.Raw = bytes.Join([][]byte{m.rawHeaders, m.rawBody}, []byte("\r\n"))
+func (m *Message) parseFlags(buffer *imapclient.FetchMessageBuffer) {
+	for _, f := range buffer.Flags {
+		m.Flags = append(m.Flags, f)
 	}
+}
 
-	keepProcessing := false
+func (m *Message) parseInternalDate(buffer *imapclient.FetchMessageBuffer) {
+	m.InternalDate = buffer.InternalDate
+}
+
+func (m *Message) parseSize(buffer *imapclient.FetchMessageBuffer) {
+	m.RFC822Size = buffer.RFC822Size
+}
+
+func (m *Message) shouldKeepProcessing(fields map[string]bool) bool {
 	for field := range fields {
 		switch field {
 		case "text", "html", "headers", "attachments", "embedded":
-			keepProcessing = true
+			return true
 		}
 	}
 
-	if err := m.FromIMAPEnvelope(buffer.Envelope, fields); err != nil {
-		return err
-	}
+	return false
+}
 
-	if !keepProcessing {
-		return nil
+func (m *Message) ensureRaw() {
+	if m.Raw == nil {
+		m.Raw = bytes.Join([][]byte{m.rawHeaders, m.rawBody}, []byte("\r\n"))
 	}
+}
 
-	msg, err := letters.ParseEmail(bytes.NewReader(m.Raw))
-	if err != nil {
-		return err
+func (m *Message) parseText(msg letters.Email) {
+	if msg.EnrichedText != "" {
+		m.Text = msg.EnrichedText
+	} else {
+		m.Text = msg.Text
 	}
+}
 
-	if _, ok := fields["text"]; ok {
-		if msg.EnrichedText != "" {
-			m.Text = msg.EnrichedText
-		} else {
-			m.Text = msg.Text
-		}
+func (m *Message) parseHtml(msg letters.Email) {
+	m.HTML = msg.HTML
+}
+
+func (m *Message) parseHeaders(msg letters.Email) {
+	for k, v := range msg.Headers.ExtraHeaders {
+		m.Headers[k] = v
 	}
-
-	if _, ok := fields["html"]; ok {
-		m.HTML = msg.HTML
-	}
-
-	if _, ok := fields["headers"]; ok {
-		for k, v := range msg.Headers.ExtraHeaders {
-			m.Headers[k] = v
-		}
-	}
-
-	if _, ok := fields["attachments"]; ok {
-		handleAttachments(m, msg)
-	}
-
-	if _, ok := fields["embedded"]; ok {
-		handleEmbeds(m, msg)
-	}
-
-	return nil
 }

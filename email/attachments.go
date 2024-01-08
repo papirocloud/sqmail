@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 
 	"github.com/mnako/letters"
+	"github.com/rs/zerolog/log"
 )
 
 func getFileName(contentType letters.ContentTypeHeader, disposition letters.ContentDispositionHeader) string {
@@ -16,18 +17,18 @@ func getFileName(contentType letters.ContentTypeHeader, disposition letters.Cont
 
 	for k := range disposition.Params {
 		if k == "name" {
-			return contentType.Params[k]
+			return disposition.Params[k]
 		}
 	}
 
 	return ""
 }
 
-func handleAttachments(m *Message, msg letters.Email) error {
+func (m *Message) parseAttachments(msg letters.Email) {
 	for _, a := range msg.AttachedFiles {
 		if a.ContentType.ContentType == "application/ics" || a.ContentType.ContentType == "text/calendar" {
 			if err := handleInvitation(m, bytes.NewReader(a.Data)); err != nil {
-				return err
+				logger.Error().Err(err).Msg("error handling invitation")
 			}
 			continue
 		}
@@ -37,7 +38,8 @@ func handleAttachments(m *Message, msg letters.Email) error {
 		data := bytes.NewBuffer(nil)
 		_, err := base64.NewEncoder(base64.StdEncoding, data).Write(a.Data)
 		if err != nil {
-			return err
+			log.Error().Err(err).Msg("error writing attachment data")
+			continue
 		}
 
 		m.Attachments = append(m.Attachments, &Attachment{
@@ -46,18 +48,17 @@ func handleAttachments(m *Message, msg letters.Email) error {
 			Filename:    getFileName(a.ContentType, a.ContentDisposition),
 		})
 	}
-
-	return nil
 }
 
-func handleEmbeds(m *Message, msg letters.Email) error {
+func (m *Message) parseEmbeds(msg letters.Email) {
 	for _, e := range msg.InlineFiles {
 		m.HasEmbeds = true
 
 		data := bytes.NewBuffer(nil)
 		_, err := base64.NewEncoder(base64.StdEncoding, data).Write(e.Data)
 		if err != nil {
-			return err
+			logger.Error().Err(err).Msg("error writing embed data")
+			continue
 		}
 
 		m.Embedded = append(m.Embedded, &EmbeddedFile{
@@ -67,6 +68,4 @@ func handleEmbeds(m *Message, msg letters.Email) error {
 			Filename:    getFileName(e.ContentType, e.ContentDisposition),
 		})
 	}
-
-	return nil
 }
