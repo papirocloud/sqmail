@@ -70,8 +70,8 @@ func TestParseSize(t *testing.T) {
 
 func TestEnsureRaw(t *testing.T) {
 	m := &Message{
-		rawHeaders: []byte("Test Headers"),
-		rawBody:    []byte("Test Body"),
+		RawHeaders: []byte("Test Headers"),
+		RawBody:    []byte("Test Body"),
 	}
 
 	m.ensureRaw()

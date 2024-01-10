@@ -62,13 +62,13 @@ func (m *Message) parseBodySection(buffer *imapclient.FetchMessageBuffer) {
 	for k, v := range buffer.BodySection {
 		switch k.Specifier {
 		case imap.PartSpecifierHeader:
-			m.rawHeaders = v
+			m.RawHeaders = v
 		case imap.PartSpecifierText:
-			m.rawBody = v
+			m.RawBody = v
 		case imap.PartSpecifierNone:
 			m.Raw = v
 		case imap.PartSpecifierMIME:
-			m.rawMime = v
+			m.RawMime = v
 		}
 	}
 }
@@ -98,7 +98,7 @@ func (m *Message) shouldKeepProcessing(fields map[string]bool) bool {
 
 func (m *Message) ensureRaw() {
 	if m.Raw == nil {
-		m.Raw = bytes.Join([][]byte{m.rawHeaders, m.rawBody}, []byte("\r\n"))
+		m.Raw = bytes.Join([][]byte{m.RawHeaders, m.RawBody}, []byte("\r\n"))
 	}
 }
 

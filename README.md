@@ -106,3 +106,30 @@ server.
 
 When using `table`, `html`, or `markdown` as the output format, messages are buffered in memory and
 then pretty-printed.
+
+### Write Operations
+
+Currently, write operations aren't supported via SQL (e.g. `INSERT`, `UPDATE`, `DELETE`).
+
+That said, you can still use the `sqmail` package to perform write operations in Go by using the
+functions available under the `github.com/papirocloud/sqmail/imap` package.
+
+Write operations via SQL will be supported in the future.
+
+## Too much hassle?
+
+If you would like to skip the trouble and unlock many more possibilities, make sure to
+check https://papiro.cloud.
+
+Papiro reads your emails and automates tasks according to your preferences.
+
+With Papiro, you can
+centralize your email experience, create advanced filtering rules, securely sync attachments to the
+cloud, and integrate with other systems to streamline your workflow.
+
+Whether you're a busy
+individual trying to manage personal and work emails efficiently, an event planner looking to
+automate communications, or just someone who wants to tailor their email workflow, Papiro provides
+the tools you need to make email management effortless.
+
+Explore the full potential of your email with Papiro at https://papiro.cloud.

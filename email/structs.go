@@ -62,9 +62,9 @@ type Message struct {
 
 	Headers map[string][]string
 
-	rawHeaders []byte
-	rawBody    []byte
-	rawMime    []byte
+	RawHeaders []byte
+	RawBody    []byte
+	RawMime    []byte
 
 	Text string
 	HTML string
