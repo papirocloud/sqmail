@@ -98,7 +98,7 @@ func (m *Message) shouldKeepProcessing(fields map[string]bool) bool {
 
 func (m *Message) ensureRaw() {
 	if m.Raw == nil {
-		m.Raw = bytes.Join([][]byte{m.RawHeaders, m.RawBody}, []byte("\r\n"))
+		m.Raw = bytes.Join([][]byte{bytes.TrimSpace(m.RawHeaders), bytes.TrimSpace(m.RawBody)}, []byte("\r\n\r\n"))
 	}
 }
 
