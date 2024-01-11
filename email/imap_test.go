@@ -76,7 +76,7 @@ func TestEnsureRaw(t *testing.T) {
 
 	m.ensureRaw()
 
-	expectedRaw := []byte("Test Headers\r\nTest Body")
+	expectedRaw := []byte("Test Headers\r\n\r\nTest Body")
 	if !bytes.Equal(m.Raw, expectedRaw) {
 		t.Errorf("Expected raw to be '%s', got '%s'", string(expectedRaw), string(m.Raw))
 	}
