@@ -21,16 +21,12 @@ const (
 func renderTable(w io.Writer, format string, fields []*sql.Field, mapsCh <-chan map[string]interface{}) {
 	var maps []map[string]interface{}
 
-	loop := true
-	for loop {
-		select {
-		case m, ok := <-mapsCh:
-			if !ok {
-				loop = false
-				break
-			}
-			maps = append(maps, m)
+	for {
+		m, ok := <-mapsCh
+		if !ok {
+			break
 		}
+		maps = append(maps, m)
 	}
 
 	t := table.NewWriter()

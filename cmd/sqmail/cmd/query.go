@@ -67,18 +67,14 @@ var queryCmd = &cobra.Command{
 			}
 		}()
 
-		loop := true
-		for loop {
-			select {
-			case msg, ok := <-msgCh:
-				if !ok {
-					close(mapsCh)
-					<-outputCh
-					loop = false
-					break
-				}
-				handleMessage(fields, mapsCh, msg)
+		for {
+			msg, ok := <-msgCh
+			if !ok {
+				close(mapsCh)
+				<-outputCh
+				break
 			}
+			handleMessage(fields, mapsCh, msg)
 		}
 	},
 }

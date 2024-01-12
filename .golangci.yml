@@ -56,3 +56,5 @@ issues:
     - path: 'sql/query.go'
       linters:
         - exhaustive
+    - path: 'cmd/sqmail/cmd/output.go'
+      text: 'S1000:'
