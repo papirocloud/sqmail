@@ -12,7 +12,7 @@ func Move(c *imapclient.Client, seqSet imap.SeqSet, mailbox string) (*imapclient
 }
 
 // UIDMove moves the specified message(s) to the end of the specified destination mailbox.
-func UIDMove(c *imapclient.Client, seqSet imap.SeqSet, mailbox string) (*imapclient.MoveData, error) {
+func UIDMove(c *imapclient.Client, uidSet imap.UIDSet, mailbox string) (*imapclient.MoveData, error) {
 	logger.Info().Str("mailbox", mailbox).Msg("moving message(s)")
-	return c.UIDMove(seqSet, mailbox).Wait()
+	return c.Move(uidSet, mailbox).Wait()
 }

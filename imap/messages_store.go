@@ -31,12 +31,12 @@ func Store(c *imapclient.Client, seqSet imap.SeqSet, flags *imap.StoreFlags, opt
 }
 
 // StreamUIDStore retrieves data associated with a message in the mailbox.
-func StreamUIDStore(c *imapclient.Client, seqSet imap.SeqSet, flags *imap.StoreFlags, options ...*imap.StoreOptions) *imapclient.FetchCommand {
+func StreamUIDStore(c *imapclient.Client, uidSet imap.UIDSet, flags *imap.StoreFlags, options ...*imap.StoreOptions) *imapclient.FetchCommand {
 	logger.Info().Msg("storing message(s)")
-	return c.UIDStore(seqSet, flags, getStoreOptions(options...))
+	return c.Store(uidSet, flags, getStoreOptions(options...))
 }
 
 // UIDStore retrieves data associated with a message in the mailbox.
-func UIDStore(c *imapclient.Client, seqSet imap.SeqSet, flags *imap.StoreFlags, options ...*imap.StoreOptions) ([]*imapclient.FetchMessageBuffer, error) {
-	return StreamUIDStore(c, seqSet, flags, options...).Collect()
+func UIDStore(c *imapclient.Client, uidSet imap.UIDSet, flags *imap.StoreFlags, options ...*imap.StoreOptions) ([]*imapclient.FetchMessageBuffer, error) {
+	return StreamUIDStore(c, uidSet, flags, options...).Collect()
 }

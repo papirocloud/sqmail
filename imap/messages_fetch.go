@@ -39,12 +39,12 @@ func Fetch(c *imapclient.Client, seqSet imap.SeqSet, options ...*imap.FetchOptio
 }
 
 // StreamUIDFetch retrieves data associated with a message in the mailbox.
-func StreamUIDFetch(c *imapclient.Client, seqSet imap.SeqSet, options ...*imap.FetchOptions) *imapclient.FetchCommand {
+func StreamUIDFetch(c *imapclient.Client, uidSet imap.UIDSet, options ...*imap.FetchOptions) *imapclient.FetchCommand {
 	logger.Info().Msg("fetching message(s)")
-	return c.UIDFetch(seqSet, getFetchOptions(options...))
+	return c.Fetch(uidSet, getFetchOptions(options...))
 }
 
 // UIDFetch retrieves data associated with a message in the mailbox.
-func UIDFetch(c *imapclient.Client, seqSet imap.SeqSet, options ...*imap.FetchOptions) ([]*imapclient.FetchMessageBuffer, error) {
-	return StreamUIDFetch(c, seqSet, options...).Collect()
+func UIDFetch(c *imapclient.Client, uidSet imap.UIDSet, options ...*imap.FetchOptions) ([]*imapclient.FetchMessageBuffer, error) {
+	return StreamUIDFetch(c, uidSet, options...).Collect()
 }

@@ -54,7 +54,7 @@ func SetFlags(c *imapclient.Client, seqSet imap.SeqSet, flags []imap.Flag, silen
 }
 
 // UIDAddFlags adds the specified flag(s) to the specified message(s).
-func UIDAddFlags(c *imapclient.Client, seqSet imap.SeqSet, flags []imap.Flag, silent bool) ([]*imapclient.FetchMessageBuffer, error) {
+func UIDAddFlags(c *imapclient.Client, uidSet imap.UIDSet, flags []imap.Flag, silent bool) ([]*imapclient.FetchMessageBuffer, error) {
 	var flagStrs []string
 	for _, flag := range flags {
 		flagStrs = append(flagStrs, string(flag))
@@ -62,7 +62,7 @@ func UIDAddFlags(c *imapclient.Client, seqSet imap.SeqSet, flags []imap.Flag, si
 
 	logger.Info().Strs("flags", flagStrs).Msg("adding flags to message(s)")
 
-	return UIDStore(c, seqSet, &imap.StoreFlags{
+	return UIDStore(c, uidSet, &imap.StoreFlags{
 		Op:     imap.StoreFlagsAdd,
 		Flags:  flags,
 		Silent: silent,
@@ -70,7 +70,7 @@ func UIDAddFlags(c *imapclient.Client, seqSet imap.SeqSet, flags []imap.Flag, si
 }
 
 // UIDDeleteFlags removes the specified flag(s) from the specified message(s).
-func UIDDeleteFlags(c *imapclient.Client, seqSet imap.SeqSet, flags []imap.Flag, silent bool) ([]*imapclient.FetchMessageBuffer, error) {
+func UIDDeleteFlags(c *imapclient.Client, uidSet imap.UIDSet, flags []imap.Flag, silent bool) ([]*imapclient.FetchMessageBuffer, error) {
 	var flagStrs []string
 	for _, flag := range flags {
 		flagStrs = append(flagStrs, string(flag))
@@ -78,7 +78,7 @@ func UIDDeleteFlags(c *imapclient.Client, seqSet imap.SeqSet, flags []imap.Flag,
 
 	logger.Info().Strs("flags", flagStrs).Msg("deleting flags from message(s)")
 
-	return UIDStore(c, seqSet, &imap.StoreFlags{
+	return UIDStore(c, uidSet, &imap.StoreFlags{
 		Op:     imap.StoreFlagsDel,
 		Flags:  flags,
 		Silent: silent,
@@ -86,7 +86,7 @@ func UIDDeleteFlags(c *imapclient.Client, seqSet imap.SeqSet, flags []imap.Flag,
 }
 
 // UIDSetFlags replaces the flags of the specified message(s) with the specified flag(s).
-func UIDSetFlags(c *imapclient.Client, seqSet imap.SeqSet, flags []imap.Flag, silent bool) ([]*imapclient.FetchMessageBuffer, error) {
+func UIDSetFlags(c *imapclient.Client, uidSet imap.UIDSet, flags []imap.Flag, silent bool) ([]*imapclient.FetchMessageBuffer, error) {
 	var flagStrs []string
 	for _, flag := range flags {
 		flagStrs = append(flagStrs, string(flag))
@@ -94,7 +94,7 @@ func UIDSetFlags(c *imapclient.Client, seqSet imap.SeqSet, flags []imap.Flag, si
 
 	logger.Info().Strs("flags", flagStrs).Msg("setting flags of message(s)")
 
-	return UIDStore(c, seqSet, &imap.StoreFlags{
+	return UIDStore(c, uidSet, &imap.StoreFlags{
 		Op:     imap.StoreFlagsSet,
 		Flags:  flags,
 		Silent: silent,

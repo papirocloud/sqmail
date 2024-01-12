@@ -7,6 +7,6 @@ import (
 )
 
 func (m *Message) Fetch(c *imapclient.Client, options ...*imap.FetchOptions) error {
-	_, err := sqmailImap.UIDFetch(c, imap.SeqSetNum(m.UID), options...)
+	_, err := sqmailImap.UIDFetch(c, imap.UIDSetNum(imap.UID(m.UID)), options...)
 	return err
 }

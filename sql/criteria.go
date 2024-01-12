@@ -15,7 +15,7 @@ func buildUidCriteria(criteria *imap.SearchCriteria, clause *WhereClause) {
 			return
 		}
 
-		criteria.UID = append(criteria.UID, imap.SeqSetNum(uint32(i)))
+		criteria.UID = append(criteria.UID, imap.UIDSetNum(imap.UID(i)))
 	default:
 		return
 	}

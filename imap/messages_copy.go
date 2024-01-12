@@ -12,7 +12,7 @@ func Copy(c *imapclient.Client, seqSet imap.SeqSet, mailbox string) (*imap.CopyD
 }
 
 // UIDCopy copies the specified message(s) to the end of the specified destination mailbox.
-func UIDCopy(c *imapclient.Client, seqSet imap.SeqSet, mailbox string) (*imap.CopyData, error) {
+func UIDCopy(c *imapclient.Client, uidSet imap.UIDSet, mailbox string) (*imap.CopyData, error) {
 	logger.Info().Str("mailbox", mailbox).Msg("copying message(s)")
-	return c.UIDCopy(seqSet, mailbox).Wait()
+	return c.Copy(uidSet, mailbox).Wait()
 }

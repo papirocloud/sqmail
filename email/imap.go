@@ -10,7 +10,7 @@ import (
 
 // FromIMAP converts a raw IMAP message into a Message object.
 func (m *Message) FromIMAP(buffer *imapclient.FetchMessageBuffer, fields map[string]bool) error {
-	m.UID = buffer.UID
+	m.UID = uint32(buffer.UID)
 	m.SeqNum = buffer.SeqNum
 
 	var parsers = map[string]func(messageBuffer *imapclient.FetchMessageBuffer){

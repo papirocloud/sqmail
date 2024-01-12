@@ -18,7 +18,7 @@ func (m *Message) HasFlag(flag imap.Flag) bool {
 
 // AddFlags adds the specified flags to the message.
 func (m *Message) AddFlags(c *imapclient.Client, flags ...imap.Flag) error {
-	_, err := sqmailImap.UIDAddFlags(c, imap.SeqSetNum(m.UID), flags, true)
+	_, err := sqmailImap.UIDAddFlags(c, imap.UIDSetNum(imap.UID(m.UID)), flags, true)
 	if err != nil {
 		return err
 	}
@@ -30,7 +30,7 @@ func (m *Message) AddFlags(c *imapclient.Client, flags ...imap.Flag) error {
 
 // DeleteFlags removes the specified flags from the message.
 func (m *Message) DeleteFlags(c *imapclient.Client, flags ...imap.Flag) error {
-	_, err := sqmailImap.UIDDeleteFlags(c, imap.SeqSetNum(m.UID), flags, true)
+	_, err := sqmailImap.UIDDeleteFlags(c, imap.UIDSetNum(imap.UID(m.UID)), flags, true)
 	if err != nil {
 		return err
 	}
@@ -49,7 +49,7 @@ func (m *Message) DeleteFlags(c *imapclient.Client, flags ...imap.Flag) error {
 
 // SetFlags sets the specified flags for the message.
 func (m *Message) SetFlags(c *imapclient.Client, flags ...imap.Flag) error {
-	_, err := sqmailImap.UIDSetFlags(c, imap.SeqSetNum(m.UID), flags, true)
+	_, err := sqmailImap.UIDSetFlags(c, imap.UIDSetNum(imap.UID(m.UID)), flags, true)
 	if err != nil {
 		return err
 	}

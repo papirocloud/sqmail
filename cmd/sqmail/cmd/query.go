@@ -34,7 +34,8 @@ var queryCmd = &cobra.Command{
 		if err != nil {
 			panic(err)
 		}
-		defer func() { _ = c.Close() }()
+		// This is hanging for some reason
+		// defer func() { _ = c.Close() }()
 
 		if err := sqmailImap.Login(c, username, password); err != nil {
 			panic(err)
@@ -66,12 +67,19 @@ var queryCmd = &cobra.Command{
 			}
 		}()
 
-		for msg := range msgCh {
-			handleMessage(fields, mapsCh, msg)
+		loop := true
+		for loop {
+			select {
+			case msg, ok := <-msgCh:
+				if !ok {
+					close(mapsCh)
+					<-outputCh
+					loop = false
+					break
+				}
+				handleMessage(fields, mapsCh, msg)
+			}
 		}
-
-		close(mapsCh)
-		<-outputCh
 	},
 }
 

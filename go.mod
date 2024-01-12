@@ -6,9 +6,9 @@ require (
 	github.com/araddon/dateparse v0.0.0-20210429162001-6b43995a97de
 	github.com/arran4/golang-ical v0.2.3
 	github.com/auxten/postgresql-parser v1.0.1
-	github.com/emersion/go-imap/v2 v2.0.0-alpha.7
-	github.com/emersion/go-message v0.16.0
-	github.com/emersion/go-sasl v0.0.0-20220912192320-0145f2c60ead
+	github.com/emersion/go-imap/v2 v2.0.0-alpha.8
+	github.com/emersion/go-message v0.18.0
+	github.com/emersion/go-sasl v0.0.0-20231106173351-e73c9f7bad43
 	github.com/jedib0t/go-pretty/v6 v6.5.0
 	github.com/mnako/letters v0.2.2
 	github.com/rs/zerolog v1.31.0
@@ -44,7 +44,7 @@ require (
 	golang.org/x/net v0.17.0 // indirect
 	golang.org/x/sync v0.5.0 // indirect
 	golang.org/x/sys v0.14.0 // indirect
-	golang.org/x/text v0.13.0 // indirect
+	golang.org/x/text v0.14.0 // indirect
 	google.golang.org/genproto v0.0.0-20231016165738-49dd2c1f3d0b // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20231016165738-49dd2c1f3d0b // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20231030173426-d783a09b4405 // indirect

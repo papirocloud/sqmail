@@ -21,8 +21,16 @@ const (
 func renderTable(w io.Writer, format string, fields []*sql.Field, mapsCh <-chan map[string]interface{}) {
 	var maps []map[string]interface{}
 
-	for m := range mapsCh {
-		maps = append(maps, m)
+	loop := true
+	for loop {
+		select {
+		case m, ok := <-mapsCh:
+			if !ok {
+				loop = false
+				break
+			}
+			maps = append(maps, m)
+		}
 	}
 
 	t := table.NewWriter()
@@ -66,28 +74,41 @@ func writeCsv(w io.Writer, fields []*sql.Field, mapsCh <-chan map[string]interfa
 		panic(err)
 	}
 
-	for m := range mapsCh {
-		var row []string
-		for _, h := range headers {
-			row = append(row, fmt.Sprintf("%v", m[h]))
-		}
-		if err := csvWriter.Write(row); err != nil {
-			panic(err)
-		}
-		csvWriter.Flush()
-	}
+	for {
+		select {
+		case m, ok := <-mapsCh:
+			if !ok {
+				if err := csvWriter.Error(); err != nil {
+					panic(err)
+				}
 
-	if err := csvWriter.Error(); err != nil {
-		panic(err)
+				return
+			}
+
+			var row []string
+			for _, h := range headers {
+				row = append(row, fmt.Sprintf("%v", m[h]))
+			}
+			if err := csvWriter.Write(row); err != nil {
+				panic(err)
+			}
+			csvWriter.Flush()
+		}
 	}
 }
 
 func writeJson(w io.Writer, mapsCh <-chan map[string]interface{}) {
 	encoder := json.NewEncoder(w)
 
-	for m := range mapsCh {
-		if err := encoder.Encode(m); err != nil {
-			panic(err)
+	for {
+		select {
+		case m, ok := <-mapsCh:
+			if !ok {
+				return
+			}
+			if err := encoder.Encode(m); err != nil {
+				panic(err)
+			}
 		}
 	}
 }

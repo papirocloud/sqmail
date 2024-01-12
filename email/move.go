@@ -8,6 +8,6 @@ import (
 
 // Move copies the specified message(s) to the end of the specified destination mailbox.
 func (m *Message) Move(c *imapclient.Client, mailbox string) error {
-	_, err := sqmailImap.UIDMove(c, imap.SeqSetNum(m.UID), mailbox)
+	_, err := sqmailImap.UIDMove(c, imap.UIDSetNum(imap.UID(m.UID)), mailbox)
 	return err
 }

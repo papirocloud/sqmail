@@ -55,7 +55,9 @@ func Select(c *imapclient.Client, fields []*Field, from string, limit int64, mes
 		return err
 	}
 
-	fetchCmd := sqmailImap.StreamUIDFetch(c, data.All, fetchOptionsFromFields(fields))
+	fetchCmd := sqmailImap.StreamUIDFetch(c, data.All.(imap.UIDSet), fetchOptionsFromFields(fields))
+	// This is hanging for some reason
+	// defer func() { _ = fetchCmd.Close() }()
 
 	handleFetchResult(fields, limit, fetchCmd, messageCh, clauses...)
 
