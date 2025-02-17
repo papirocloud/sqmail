@@ -15,7 +15,6 @@ linters:
     - errname
     - errorlint
     - exhaustive
-    - exportloopref
     #- funlen
     - goconst
     - gocritic
@@ -30,11 +29,11 @@ linters:
     - nosprintfhostport
     - predeclared
     - staticcheck
-    - tenv
     - tparallel
     - typecheck
     - unconvert
     - unused
+    - usetesting
     - usestdlibvars
     - wastedassign
 
@@ -47,14 +46,14 @@ issues:
         - goconst
         - gocritic
         - staticcheck
-    - path: 'sql/criteria.go'
+    - path: "sql/criteria.go"
       linters:
         - exhaustive
-    - path: 'sql/parser.go'
+    - path: "sql/parser.go"
       linters:
         - exhaustive
-    - path: 'sql/query.go'
+    - path: "sql/query.go"
       linters:
         - exhaustive
-    - path: 'cmd/sqmail/cmd/output.go'
-      text: 'S1000:'
+    - path: "cmd/sqmail/cmd/output.go"
+      text: "S1000:"
