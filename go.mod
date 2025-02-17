@@ -4,7 +4,7 @@ go 1.21.1
 
 require (
 	github.com/araddon/dateparse v0.0.0-20210429162001-6b43995a97de
-	github.com/arran4/golang-ical v0.2.3
+	github.com/arran4/golang-ical v0.3.2
 	github.com/auxten/postgresql-parser v1.0.1
 	github.com/emersion/go-imap/v2 v2.0.0-alpha.8
 	github.com/emersion/go-message v0.18.0
