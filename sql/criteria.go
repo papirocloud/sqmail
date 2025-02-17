@@ -10,7 +10,7 @@ import (
 func buildUidCriteria(criteria *imap.SearchCriteria, clause *WhereClause) {
 	switch clause.Operator {
 	case Equals:
-		i, err := strconv.Atoi(clause.GetValue())
+		i, err := strconv.ParseUint(clause.GetValue(), 10, 32)
 		if err != nil {
 			return
 		}
