@@ -1,45 +1,23 @@
-name: Tests
+name: Testing
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
-    types: [opened, synchronize, reopened]
-
-env:
-  GO_VERSION: "1.23.6"
 
 jobs:
-  changes:
-    name: Detect Changes
+  test:
     runs-on: ubuntu-latest
 
-    outputs:
-      src: ${{ steps.filter.outputs.src }}
-
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - uses: dorny/paths-filter@v2
-        id: filter
-        with:
-          filters: |
-            src:
-              - '**/*.go'
-  test:
-    name: Run Tests
-    runs-on: ubuntu-latest
-    needs: changes
-    if: ${{ needs.changes.outputs.src == 'true' }}
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Setup Go
+      - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: ${{ env.GO_VERSION }}
+          go-version: "1.23.6"
 
       - name: Install go-junit-report
         run: |
@@ -47,11 +25,19 @@ jobs:
           export PATH=$PATH:$GOPATH/bin
           go install github.com/jstemmer/go-junit-report@latest
 
-      - name: Run Tests
+      - name: Download dependencies
+        run: go mod download
+
+      - name: Generate
+        run: go generate ./...
+
+      - name: Run tests
         run: |
           export GOPATH="$HOME/go/"
           export PATH=$PATH:$GOPATH/bin
-          go test -v ./... | go-junit-report -set-exit-code > report.xml
+          sudo go test -v ./... | tee tests.out
+          cat tests.out | go-junit-report -set-exit-code > report.xml
+          rm tests.out
 
       - name: Summarize Test Results
         if: always()
