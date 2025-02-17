@@ -11,7 +11,7 @@ require (
 	github.com/emersion/go-sasl v0.0.0-20231106173351-e73c9f7bad43
 	github.com/jedib0t/go-pretty/v6 v6.5.0
 	github.com/mnako/letters v0.2.2
-	github.com/rs/zerolog v1.31.0
+	github.com/rs/zerolog v1.33.0
 	github.com/spf13/cobra v1.8.0
 )
 
