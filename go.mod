@@ -7,7 +7,7 @@ require (
 	github.com/arran4/golang-ical v0.2.3
 	github.com/auxten/postgresql-parser v1.0.1
 	github.com/emersion/go-imap/v2 v2.0.0-alpha.8
-	github.com/emersion/go-message v0.18.0
+	github.com/emersion/go-message v0.18.2
 	github.com/emersion/go-sasl v0.0.0-20231106173351-e73c9f7bad43
 	github.com/jedib0t/go-pretty/v6 v6.5.0
 	github.com/mnako/letters v0.2.2
@@ -23,7 +23,6 @@ require (
 	github.com/cockroachdb/redact v1.0.8 // indirect
 	github.com/cockroachdb/sentry-go v0.6.1-cockroachdb.2 // indirect
 	github.com/dustin/go-humanize v1.0.0 // indirect
-	github.com/emersion/go-textwrapper v0.0.0-20200911093747-65d896831594 // indirect
 	github.com/getsentry/raven-go v0.2.0 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
