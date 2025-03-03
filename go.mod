@@ -6,7 +6,7 @@ require (
 	github.com/araddon/dateparse v0.0.0-20210429162001-6b43995a97de
 	github.com/arran4/golang-ical v0.3.2
 	github.com/auxten/postgresql-parser v1.0.1
-	github.com/emersion/go-imap/v2 v2.0.0-beta.4
+	github.com/emersion/go-imap/v2 v2.0.0-beta.5
 	github.com/emersion/go-message v0.18.2
 	github.com/emersion/go-sasl v0.0.0-20231106173351-e73c9f7bad43
 	github.com/jedib0t/go-pretty/v6 v6.6.6
