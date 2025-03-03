@@ -10,7 +10,7 @@ require (
 	github.com/emersion/go-message v0.18.2
 	github.com/emersion/go-sasl v0.0.0-20231106173351-e73c9f7bad43
 	github.com/jedib0t/go-pretty/v6 v6.6.6
-	github.com/mnako/letters v0.2.4
+	github.com/mnako/letters v0.2.5
 	github.com/rs/zerolog v1.33.0
 	github.com/spf13/cobra v1.9.1
 )
